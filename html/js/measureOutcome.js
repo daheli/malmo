@@ -1,4 +1,4 @@
-var baseUrl = "http://localhost:8080/fake";
+
 var myChart = echarts.init(document.getElementById('measureOutcome'));
 var legendName = ['*-0.0','0.0-50.0','50.0-100.0','100.0-150.0','150.0-200.0','200.0-*'];
 var legendData = [];
@@ -158,7 +158,8 @@ myChart.setOption(option);
 myChart.showLoading();
 
 $(document).ready(function() {
-	$.getJSON(baseUrl + "/measureOutcome.js",function(data,status){
+    console.log(baseUrl);
+	$.getJSON(baseUrl + "/measureOutcome.json",function(data,status){
                         // console.log("Data: " + JSON.stringify(data) + "\nStatus: " + status);
                         buckets = data.aggregations.date_histogram.buckets;
                         console.log("buckets numbers:", JSON.stringify(buckets.length));
