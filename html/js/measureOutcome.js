@@ -7,7 +7,7 @@ var legendTotalData = [];
 
 var option = {
 	title: {
-		text: 'measure百分比'
+		text: '接入延迟'
 	},
 	tooltip: {
 		show: true,
@@ -29,7 +29,7 @@ var option = {
     },
     xAxis: {
     	data: ['2016年','2017年'],
-    	name: '时间',
+    	name: '',
         //silent: false,
         //axisLine: {onZero: true},
         // splitLine: {show: false},
@@ -52,7 +52,7 @@ var option = {
     		normal: {
     			show: true,
     			formatter: function(p) {
-    				console.log(p);  
+    				// console.log(p);  
     				if(p.value > 5) {          
     					return p.value + '%';        
     				} else {
@@ -70,7 +70,7 @@ var option = {
     		normal: {
     			show: true,
     			formatter: function(p) {
-    				console.log(p);  
+    				// console.log(p);  
     				if(p.value > 5) {          
     					return p.value + '%';        
     				} else {
@@ -88,7 +88,7 @@ var option = {
     		normal: {
     			show: true,
     			formatter: function(p) {
-    				console.log(p);  
+    				// console.log(p);  
     				if(p.value > 5) {          
     					return p.value + '%';        
     				} else {
@@ -106,7 +106,7 @@ var option = {
     		normal: {
     			show: true,
     			formatter: function(p) {
-    				console.log(p);  
+    				// console.log(p);  
     				if(p.value > 5) {          
     					return p.value + '%';        
     				} else {
@@ -124,7 +124,7 @@ var option = {
     		normal: {
     			show: true,
     			formatter: function(p) {
-    				console.log(p);  
+    				// console.log(p);  
     				if(p.value > 5) {          
     					return p.value + '%';        
     				} else {
@@ -142,7 +142,7 @@ var option = {
     		normal: {
     			show: true,
     			formatter: function(p) {
-    				console.log(p);  
+    				// console.log(p);  
     				if(p.value > 5) {          
     					return p.value + '%';        
     				} else {
@@ -158,7 +158,7 @@ myChart.setOption(option);
 myChart.showLoading();
 
 $(document).ready(function() {
-    console.log(baseUrl);
+    console.debug(baseUrl);
 	$.getJSON(baseUrl + "/measureOutcome.json",function(data,status){
                         // console.log("Data: " + JSON.stringify(data) + "\nStatus: " + status);
                         buckets = data.aggregations.date_histogram.buckets;
