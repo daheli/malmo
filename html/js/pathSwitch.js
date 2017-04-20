@@ -7,6 +7,7 @@ var ps_legendTotalData = [];
 var ps_xAxisData = [];
 var ps_xAxisBucketName = {};
 var ps_mySeries = [];
+var ps_legendName_display = {'id302':'302:成功切换', 'id304':'304:需要重新握手的切换模式'};
 
 var ps_option = {
 	title: {
@@ -49,7 +50,7 @@ ps_myChart.setOption(ps_option);
 ps_myChart.showLoading();
 
 $(document).ready(function() {
-    console.debug(baseUrl);
+	console.debug(baseUrl);
 	$.getJSON(baseUrl + "/pathSwitch.json",function(data,status){
                         // console.log("Data: " + JSON.stringify(data) + "\nStatus: " + status);
                         buckets = data.aggregations.date_histogram.buckets;
@@ -60,21 +61,21 @@ $(document).ready(function() {
                     });
 
 	function ps_init(buckets) {
-        keys = Object.keys(buckets[0].path.s.buckets);
+		keys = Object.keys(buckets[0].path.s.buckets);
         // console.debug('value.path.s.buckets:' + keys);
         keys.forEach(function(value, key){
-            ps_legendName.push(value);
+        	ps_legendName.push(value);
         })
-		ps_legendName.forEach(function(value, key) {
-			ps_legendData[key] = [];
-			ps_legendAvgData[key] = [];		
-		});	
-		console.debug('legend init: ' + ps_legendName);
-	}
+        ps_legendName.forEach(function(value, key) {
+        	ps_legendData[key] = [];
+        	ps_legendAvgData[key] = [];		
+        });	
+        console.debug('legend init: ' + ps_legendName);		
+    }
 
-	function ps_transform(buckets) {
+    function ps_transform(buckets) {
 
-		buckets.forEach(function(value, bucketIndex, listObj, argument) { 
+    	buckets.forEach(function(value, bucketIndex, listObj, argument) { 
 				// console.log(Date.parse(value.key_as_string) + ' ' + key);
 				ps_xAxisData.push($.format.date(value.key_as_string, "yyyy-MM-dd"));
 				ps_legendName.forEach(function(lValue, index, listObj, argument) { 
@@ -84,47 +85,50 @@ $(document).ready(function() {
 					ps_legendData[index][bucketIndex] = parseInt(doc_count);
 				});
 			}); 
-		console.log('ps_legendData: ' + JSON.stringify(ps_legendData));        
+    	console.log('ps_legendData: ' + JSON.stringify(ps_legendData));
 
-		ps_total();
-		ps_average();
-		
-		ps_legendName.forEach(function(lValue, key) { 				
-			ps_mySeries[key] = 
-            {
-                name: ps_legendName[key],
-                data: ps_legendAvgData[key],
-                type: 'bar',
-                stack: 'one',       
-                label: {
-                    normal: {
-                        show: true,
-                        formatter: function(p) {
-                            if(p.value > 5) {          
-                                return p.value + '%';        
-                            } else {
-                                return '';
-                            }
-                        },
-                    }
-                },   
-            }
-		});
-		console.log('ps_mySeries: ' + JSON.stringify(ps_mySeries));
+    	ps_total();
+    	ps_average();
 
-		ps_myChart.setOption({
-            legend: {
-                data: ps_legendName,
-            },
-			xAxis: {
-				data: ps_xAxisData
-			},
-			series: ps_mySeries
-		});
-	}
+    	ps_legendName.forEach(function(lValue, key) {    		
+    		ps_mySeries[key] = 
+    		{            	
+    			name: ps_legendName[key],
+    			data: ps_legendAvgData[key],
+    			type: 'bar',
+    			stack: 'one',       
+    			label: {
+    				normal: {
+    					show: true,
+    					formatter: function(p) {
+    						if(p.value > 5) {          
+    							return p.value + '%';        
+    						} else {
+    							return '';
+    						}
+    					},
+    				}
+    			},   
+    		}
+    	});
+    	console.log('ps_mySeries: ' + JSON.stringify(ps_mySeries));
 
-	function ps_total() {
-		len = ps_legendData[0].length;
+    	ps_myChart.setOption({
+    		legend: {
+    			data: ps_legendName,
+    			formatter: function (name) {
+    				return ps_legendName_display[name];
+    			},
+    		},
+    		xAxis: {
+    			data: ps_xAxisData
+    		},
+    		series: ps_mySeries
+    	});
+    }
+
+    function ps_total() {
+    	len = ps_legendData[0].length;
 		// console.log('lname: ' + len);
 		for(var i=0; i<len; i++) {
 			total = 0;
